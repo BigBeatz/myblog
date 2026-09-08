@@ -3,7 +3,8 @@ backend:
   repo: BigBeatz/myblog
   branch: main
   base_url: "https://decap-oauth-worker.linbie999.workers.dev"
-  auth_endpoint: "/auth"
+  auth_endpoint: "auth"          # 注意：去掉前面的斜杠 "/"，改为 "auth"
+  site_domain: "blog.biglbeatz.ggff.net" # 明确指定你的博客域名
   open_authoring: false
 
 media_folder: "static/images/uploads"
