@@ -1,0 +1,29 @@
+backend:
+  name: github
+  repo: BigBeatz/myblog
+  branch: main
+  auth_endpoint: "https://<YOUR_WORKER_URL>/auth"
+  open_authoring: false
+
+media_folder: "static/images/uploads"
+public_folder: "/images/uploads"
+
+publish_mode: editorial_workflow
+
+frontmatter_delimiter: "+++"
+
+collections:
+  - name: "post"
+    label: "Posts"
+    folder: "content/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "md"
+    frontmatter_format: toml
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "string", required: false}
+      - {label: "Tags", name: "tags", widget: "list", required: false}
+      - {label: "Draft", name: "draft", widget: "boolean", default: false}
+      - {label: "Body", name: "body", widget: "markdown"}
