@@ -2,7 +2,8 @@ backend:
   name: github
   repo: BigBeatz/myblog
   branch: main
-  auth_endpoint: "https://decap-oauth-worker.linbie999.workers.dev/auth"
+  base_url: "https://decap-oauth-worker.linbie999.workers.dev"
+  auth_endpoint: "/auth"
   open_authoring: false
 
 media_folder: "static/images/uploads"
