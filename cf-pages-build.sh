@@ -11,7 +11,7 @@ HUGO_VERSION="${HUGO_VERSION:-0.111.3}"
 
 # The repository currently contains .gitmodules but may not contain the
 # submodule gitlink. Cloudflare can still build by downloading the theme here.
-THEME_DIR="themes/PaperMod"
+THEME_DIR="adityatelange/hugo-PaperMod"
 if [ ! -d "${THEME_DIR}/layouts" ] && [ ! -d "${THEME_DIR}/assets" ]; then
   echo "Stack theme is not present; downloading it..."
   rm -rf "$THEME_DIR"
