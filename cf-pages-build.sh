@@ -1,39 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# cf-pages-build.sh
-# Lightweight build helper for Cloudflare Pages:
-# - ensures the hugo-PaperMod is available
-# - downloads Hugo Extended if not present
-# - runs hugo to produce the site in ./public
 
-# Set desired Hugo version (can be overridden via CF environment variable HUGO_VERSION)
+# 设置你需要的 Hugo 版本
 HUGO_VERSION="${HUGO_VERSION:-0.111.3}"
 
-# The repository currently contains .gitmodules but may not contain the
-# submodule gitlink. Cloudflare can still build by downloading the theme here.
-THEME_DIR="adityatelange/hugo-PaperMod"
-if [ ! -d "${THEME_DIR}/layouts" ] && [ ! -d "${THEME_DIR}/assets" ]; then
-  echo "Stack theme is not present; downloading it..."
-  rm -rf "$THEME_DIR"
-  mkdir -p themes
-  git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git "$THEME_DIR"
-else
-  # Initialize/update it when the repository is later converted to a real submodule.
-  git submodule update --init --recursive || true
-fi
+# 1. 核心修复：不管三七二十一，先检查并把 PaperMod 主题从 GitHub 实时克隆到构建环境中
+THEME_DIR="themes/PaperMod"
+echo "Checking and downloading PaperMod theme..."
+rm -rf "$THEME_DIR"
+mkdir -p themes
+git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git "$THEME_DIR"
 
-# if we have hugo and it's extended, use it
-if command -v hugo >/dev/null 2>&1; then
-  if hugo version | grep -qi "extended"; then
-    echo "Using system hugo (extended): $(hugo version)"
-    hugo --gc --minify
-    exit 0
-  else
-    echo "System hugo found but not extended; will download hugo_extended ${HUGO_VERSION}"
-  fi
-fi
-
-# Download Hugo Extended binary for the build environment
+# 2. 自动下载指定版本的 Hugo Extended（确保渲染正常）
 OS_NAME="$(uname)"
 ARCH_NAME="$(uname -m)"
 case "$OS_NAME" in
@@ -47,26 +25,22 @@ case "$ARCH_NAME" in
   *) ARCH_PKG=64bit ;;
 esac
 
-# Hugo release file naming uses mixed-case for macOS; ensure exact name for Linux.
 TAR_NAME="hugo_extended_${HUGO_VERSION}_${OS_PKG}-${ARCH_PKG}.tar.gz"
 DOWNLOAD_URL="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${TAR_NAME}"
 
 echo "Downloading Hugo Extended from ${DOWNLOAD_URL}"
-
-# download and extract locally
 curl -sSL "$DOWNLOAD_URL" -o /tmp/hugo.tar.gz
 mkdir -p /tmp/hugo_extract
 tar -xzf /tmp/hugo.tar.gz -C /tmp/hugo_extract
-# find the hugo binary
+
 HUGO_BIN=$(find /tmp/hugo_extract -type f -name hugo -print -quit)
 if [ -z "$HUGO_BIN" ]; then
   echo "Failed to find hugo binary in archive" >&2
-  ls -la /tmp/hugo_extract
   exit 1
 fi
 chmod +x "$HUGO_BIN"
-export PATH="/tmp/hugo_extract:$PATH"
 
 echo "Using downloaded hugo: $($HUGO_BIN version)"
-# build
+
+# 3. 正式执行构建
 "$HUGO_BIN" --gc --minify
