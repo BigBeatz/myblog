@@ -1,0 +1,11 @@
+baseURL = 'https://blog.biglbeatz.ggff.net/'
+languageCode = 'zh-cn'
+title = 'ChinaBigLBeatz的个人博客'
+theme = 'hugo-theme-stack'
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true  # 允许渲染 HTML 标签（如 iframe）
+[params]
+  author = "BigLBeatz"
+  description = "编曲音乐人"
