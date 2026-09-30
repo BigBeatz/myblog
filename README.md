@@ -1,2 +1,2 @@
 # myblog
-Cloudflare Pages个人博客
+私人博客
