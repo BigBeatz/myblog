@@ -2,7 +2,7 @@
 set -euo pipefail
 # cf-pages-build.sh
 # Lightweight build helper for Cloudflare Pages:
-# - ensures the Stack theme is available
+# - ensures the hugo-PaperMod is available
 # - downloads Hugo Extended if not present
 # - runs hugo to produce the site in ./public
 
@@ -11,12 +11,12 @@ HUGO_VERSION="${HUGO_VERSION:-0.111.3}"
 
 # The repository currently contains .gitmodules but may not contain the
 # submodule gitlink. Cloudflare can still build by downloading the theme here.
-THEME_DIR="themes/hugo-theme-stack"
+THEME_DIR="themes/PaperMod"
 if [ ! -d "${THEME_DIR}/layouts" ] && [ ! -d "${THEME_DIR}/assets" ]; then
   echo "Stack theme is not present; downloading it..."
   rm -rf "$THEME_DIR"
   mkdir -p themes
-  git clone --depth 1 https://github.com/CaiJimmy/hugo-theme-stack.git "$THEME_DIR"
+  git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git "$THEME_DIR"
 else
   # Initialize/update it when the repository is later converted to a real submodule.
   git submodule update --init --recursive || true
