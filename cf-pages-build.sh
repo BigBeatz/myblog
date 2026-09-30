@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 设置你需要的 Hugo 版本
+# 设置 Hugo 版本（满足 PaperMod v0.146.0+ 的硬性要求）
 HUGO_VERSION="${HUGO_VERSION:-0.146.0}"
 
-# 1. 核心修复：不管三七二十一，先检查并把 PaperMod 主题从 GitHub 实时克隆到构建环境中
+# 1. 优化：改用 curl 下载 PaperMod 主题的压缩包并解压（秒级完成，绝不卡死）
 THEME_DIR="themes/PaperMod"
-echo "Checking and downloading PaperMod theme..."
+echo "Downloading PaperMod theme via ZIP..."
 rm -rf "$THEME_DIR"
-mkdir -p themes
-git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git "$THEME_DIR"
+mkdir -p "$THEME_DIR"
 
-# 2. 自动下载指定版本的 Hugo Extended（确保渲染正常）
+curl -sL https://github.com/adityatelange/hugo-PaperMod/archive/refs/heads/master.zip -o /tmp/papermod.zip
+unzip -q /tmp/papermod.zip -d /tmp/
+mv /tmp/hugo-PaperMod-master/* "$THEME_DIR/"
+
+# 2. 下载并安装指定版本的 Hugo Extended
 OS_NAME="$(uname)"
 ARCH_NAME="$(uname -m)"
 case "$OS_NAME" in
@@ -42,5 +45,5 @@ chmod +x "$HUGO_BIN"
 
 echo "Using downloaded hugo: $($HUGO_BIN version)"
 
-# 3. 正式执行构建
+# 3. 执行正式构建
 "$HUGO_BIN" --gc --minify
