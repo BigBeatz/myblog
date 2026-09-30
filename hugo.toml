@@ -1,7 +1,7 @@
 baseURL = 'https://blog.biglbeatz.ggff.net/'
 languageCode = 'zh-cn'
 title = 'ChinaBigLBeatz的个人博客'
-theme = 'hugo'
+theme = 'themes/PaperMod'
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
