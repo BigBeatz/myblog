@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 设置你需要的 Hugo 版本
-HUGO_VERSION="${HUGO_VERSION:-0.111.3}"
+HUGO_VERSION="${HUGO_VERSION:-0.146.0}"
 
 # 1. 核心修复：不管三七二十一，先检查并把 PaperMod 主题从 GitHub 实时克隆到构建环境中
 THEME_DIR="themes/PaperMod"
